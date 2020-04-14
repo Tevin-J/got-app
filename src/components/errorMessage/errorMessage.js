@@ -1,12 +1,19 @@
 import React from 'react'
 import error from '../../assets/img/error.jpg'
-import errorMessage from './errorMessage.css'
-
+import styled from "styled-components";
+const IMG = styled.img`
+    width: 100%;
+`
+const SPAN = styled.span`
+    color: white;
+    display: flex;
+    justify-content: center;
+`
 const ErrorMessage = () => {
     return (
         <>
-            <img src={error}/>
-            <span>Something is wrong</span>
+            <SPAN>Something is wrong</SPAN>
+            <IMG src={error}/>
         </>
     )
 }

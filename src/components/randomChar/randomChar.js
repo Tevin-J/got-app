@@ -8,7 +8,7 @@ import ErrorMessage from "../errorMessage/errorMessage";
 export const RandomCharBlock = styled.div`
     background-color: #fff;
     padding: 25px 25px 15px 25px;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
 `
 const RandomCharHeader = styled.h4`
     margin-bottom: 20px;
@@ -35,6 +35,11 @@ class RandomChar extends Component {
     /*когда компонента отрисуется вызовем ф-ю по загрузке рандомного героя*/
     componentDidMount() {
         this.updateCharacter()
+        this.timerId = setInterval(this.updateCharacter, 5000)
+    }
+    /*когда компонента будет убита, обновления героев должны прекратиться*/
+    componentWillUnmount() {
+        clearInterval(this.timerId)
     }
     onCharLoaded = (char) => {
         this.setState({
@@ -50,12 +55,12 @@ class RandomChar extends Component {
     }
     /*функция показа рандомного героя*/
     updateCharacter = () => {
-        const id = Math.floor(Math.random()*350 + 25)
-        /*делаем запрос на сервер с айдишкой героя, затем закрвываем прелоадер и
-        обновляем стейт пришедшими с сервера данными*/
-        this.gotAPI.getCharacter(id)
-            .then(this.onCharLoaded)
-            .catch(this.onError)
+            const id = Math.floor(Math.random()*350 + 25)
+            /*делаем запрос на сервер с айдишкой героя, затем закрвываем прелоадер и
+            обновляем стейт пришедшими с сервера данными*/
+            this.gotAPI.getCharacter(id)
+                .then(this.onCharLoaded)
+                .catch(this.onError)
     }
     render() {
         const {char, isLoading, isError} = this.state
@@ -82,11 +87,11 @@ const View = ({char}) => {
             <RandomCharHeader>Random Character: {name}</RandomCharHeader>
             <ul className="list-group list-group-flush">
                 <TermBlock className="list-group-item">
-                    <Term>Gender </Term>
+                    <Term>Gender</Term>
                     <span>{gender}</span>
                 </TermBlock>
                 <TermBlock className="list-group-item">
-                    <Term>Born </Term>
+                    <Term>Born</Term>
                     <span>{born}</span>
                 </TermBlock>
                 <TermBlock className="list-group-item">
@@ -94,7 +99,7 @@ const View = ({char}) => {
                     <span>{died}</span>
                 </TermBlock>
                 <TermBlock className="list-group-item">
-                    <Term>Culture </Term>
+                    <Term>Culture</Term>
                     <span>{culture}</span>
                 </TermBlock>
             </ul>
