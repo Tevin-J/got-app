@@ -6,7 +6,7 @@ import ErrorMessage from "../errorMessage/errorMessage";
 import ButtonToggle from "reactstrap/es/Button";
 import CharacterPage from "../characterPage/characterPage";
 import ItemList from "../itemList/itemList";
-import CharDetails from "../charDetails/charDetails";
+import CharDetails from "../itemDetails/itemDetails";
 import gotAPI from "../../api/api";
 
 
