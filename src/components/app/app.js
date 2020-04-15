@@ -4,10 +4,12 @@ import Header from "../header/header";
 import RandomChar from "../randomChar/randomChar";
 import ErrorMessage from "../errorMessage/errorMessage";
 import ButtonToggle from "reactstrap/es/Button";
-import CharacterPage from "../characterPage/characterPage";
+import CharactersPage from "../pages/charactersPage/charactersPage";
 import ItemList from "../itemList/itemList";
 import CharDetails from "../itemDetails/itemDetails";
 import gotAPI from "../../api/api";
+import BooksPage from "../pages/booksPage/booksPage";
+import HousesPage from "../pages/housesPage/housesPage";
 
 
 class App extends Component {
@@ -49,27 +51,9 @@ class App extends Component {
                             </ButtonToggle>
                         </Col>
                     </Row>
-                    <CharacterPage/>
-                    <Row>
-                        <Col md='6'>
-                            <ItemList onItemSelected={this.onItemSelected}
-                                      getData={this.gotAPI.getAllBooks}
-                                      renderItem={(item) => item.name}/>
-                        </Col>
-                        <Col md='6'>
-                            <CharDetails charId={this.state.selectedChar}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md='6'>
-                            <ItemList onItemSelected={this.onItemSelected}
-                                      getData={this.gotAPI.getAllHouses}
-                                      renderItem={(item) => item.name}/>
-                        </Col>
-                        <Col md='6'>
-                            <CharDetails charId={this.state.selectedChar}/>
-                        </Col>
-                    </Row>
+                    <CharactersPage/>
+                    <BooksPage/>
+                    <HousesPage/>
                 </Container>
             </>
         );

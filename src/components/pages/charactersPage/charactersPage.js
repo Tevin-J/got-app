@@ -1,11 +1,11 @@
 import React from 'react'
-import ItemList from "../itemList/itemList";
-import ItemDetails, {Field} from "../itemDetails/itemDetails";
-import ErrorMessage from "../errorMessage/errorMessage";
-import gotAPI from "../../api/api";
-import RowBlock from "../rowBlock/rowBlock";
+import ItemList from "../../itemList/itemList";
+import ItemDetails, {Field} from "../../itemDetails/itemDetails";
+import ErrorMessage from "../../errorMessage/errorMessage";
+import gotAPI from "../../../api/api";
+import RowBlock from "../../rowBlock/rowBlock";
 
-class CharacterPage extends React.Component {
+class CharactersPage extends React.Component {
     gotAPI = new gotAPI()
     state = {
         selectedChar: null,
@@ -23,7 +23,7 @@ class CharacterPage extends React.Component {
         if (this.state.error) {
             return <ErrorMessage/>
         }
-        const itemList = (
+        const charList = (
             /*передаем в универсальную компоненту ItemList ф-и по отрисовке компоненты
             и запросу на сервер с теми параметрами которые нужны конкретно этой компоненте*/
             <ItemList onItemSelected={this.onCharSelected}
@@ -43,8 +43,8 @@ class CharacterPage extends React.Component {
             </ItemDetails>
         )
         return (
-            <RowBlock left={itemList} right={charDetails}/>
+            <RowBlock left={charList} right={charDetails}/>
         )
     }
 }
-export default CharacterPage
+export default CharactersPage
