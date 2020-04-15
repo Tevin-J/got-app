@@ -3,7 +3,7 @@ export default class gotAPI {
         this._apiBase = 'https://www.anapioficeandfire.com/api/'
     }
     /*метод получения данных с сервера*/
-    async getResource(url) {
+    getResource = async (url) => {
         const response = await fetch(`${this._apiBase}${url}`)
         if (!response.ok) {
             throw new Error(`Couldn't fetch ${url}, status: ${response.status}`)
@@ -12,29 +12,35 @@ export default class gotAPI {
     }
     /*после получения необходимых данных с сервера в виде json, мапим этот массив
     объектов обрабатывая каждый объект ф-ей _transformCharacter*/
-    async getAllCharacters() {
+    getAllCharacters = async () => {
         const result = await this.getResource(`characters?page=5`)
         return result.map(this._transformCharacter)
     }
-    async getCharacter(id) {
+    getCharacter = async (id) => {
         const character = await this.getResource(`characters/${id}`)
         return this._transformCharacter(character)
     }
-    getAllBooks() {
-        return this.getResource(`books/`)
+    getAllBooks = async () => {
+        const res = await this.getResource(`/books/`);
+        return res.map(this._transformBook);
     }
-    getBook(id) {
-        return this.getResource(`books/${id}`)
+
+    getBook = async (id) => {
+        const book = await this.getResource(`/books/${id}/`);
+        return this._transformBook(book);
     }
-    getAllHouses() {
-        return this.getResource(`houses/`)
+    getAllHouses = async () => {
+        const res = await this.getResource(`/houses/`);
+        return res.map(this._transformHouse);
     }
-    getHouse(id) {
-        return this.getResource(`houses/${id}`)
+
+    getHouse = async (id) => {
+        const house = await this.getResource(`/houses/${id}/`);
+        return this._transformHouse(house);
     }
     /*проверяем есть ли на сервере конкретное свойство объекта, если нет, то выводим
     сообщение что данных нет*/
-    isSet(data) {
+    isSet = (data) => {
         if (data) {
             return data
         } else {
@@ -58,7 +64,7 @@ export default class gotAPI {
             culture: this.isSet(char.culture)
         }
     }
-    _transformHouse(house) {
+    _transformHouse = (house) => {
         return {
             id: this._extractId(house),
             name: this.isSet(house.name),
@@ -68,7 +74,7 @@ export default class gotAPI {
             ancestralWeapons: this.isSet(house.ancestralWeapons)
         }
     }
-    _transformBook(book) {
+    _transformBook = (book) => {
         return {
             id: this._extractId(book),
             name: this.isSet(book.name),

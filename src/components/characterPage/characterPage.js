@@ -1,10 +1,12 @@
 import React from 'react'
-import {Col, Row} from "reactstrap";
 import ItemList from "../itemList/itemList";
-import CharDetails from "../charDetails/charDetails";
+import CharDetails, {Field} from "../charDetails/charDetails";
 import ErrorMessage from "../errorMessage/errorMessage";
+import gotAPI from "../../api/api";
+import RowBlock from "../rowBlock/rowBlock";
 
 class CharacterPage extends React.Component {
+    gotAPI = new gotAPI()
     state = {
         selectedChar: null,
         error: false
@@ -14,22 +16,28 @@ class CharacterPage extends React.Component {
     }
     /*обработка клика по конкретному персонажу, чтоб в itemList затем
     показывался этот персонаж*/
-    onCharSelected = (id) => {
+    onItemSelected = (id) => {
         this.setState({selectedChar: id})
     }
     render() {
         if (this.state.error) {
             return <ErrorMessage/>
         }
+        const itemList = (
+            <ItemList onItemSelected={this.onItemSelected}
+                      getData={this.gotAPI.getAllCharacters}
+                      renderItem={(item) => `${item.name} (${item.gender})`}/>
+        )
+        const charDetails = (
+            <CharDetails charId={this.state.selectedChar}>
+                <Field field='gender' label='Gender'/>
+                <Field field='born' label='Born'/>
+                <Field field='died' label='Died'/>
+                <Field field='culture' label='Culture'/>
+            </CharDetails>
+        )
         return (
-            <Row>
-                <Col md='6'>
-                    <ItemList onCharSelected={this.onCharSelected}/>
-                </Col>
-                <Col md='6'>
-                    <CharDetails charId={this.state.selectedChar}/>
-                </Col>
-            </Row>
+            <RowBlock left={itemList} right={charDetails}/>
         )
     }
 }

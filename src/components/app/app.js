@@ -5,9 +5,13 @@ import RandomChar from "../randomChar/randomChar";
 import ErrorMessage from "../errorMessage/errorMessage";
 import ButtonToggle from "reactstrap/es/Button";
 import CharacterPage from "../characterPage/characterPage";
+import ItemList from "../itemList/itemList";
+import CharDetails from "../charDetails/charDetails";
+import gotAPI from "../../api/api";
 
 
 class App extends Component {
+    gotAPI = new gotAPI()
     state = {
         error: false,
         showRandomChar: true,
@@ -40,10 +44,32 @@ class App extends Component {
                     <Row>
                         <Col lg={{size: 5, offset: 0}}>
                             {char}
-                            <ButtonToggle color='primary' onClick={this.toggleRandomChar}>Toggle random character</ButtonToggle>
+                            <ButtonToggle color='primary' onClick={this.toggleRandomChar}>
+                                Toggle random character
+                            </ButtonToggle>
                         </Col>
                     </Row>
-                   <CharacterPage/>
+                    <CharacterPage/>
+                    <Row>
+                        <Col md='6'>
+                            <ItemList onItemSelected={this.onItemSelected}
+                                      getData={this.gotAPI.getAllBooks}
+                                      renderItem={(item) => item.name}/>
+                        </Col>
+                        <Col md='6'>
+                            <CharDetails charId={this.state.selectedChar}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md='6'>
+                            <ItemList onItemSelected={this.onItemSelected}
+                                      getData={this.gotAPI.getAllHouses}
+                                      renderItem={(item) => item.name}/>
+                        </Col>
+                        <Col md='6'>
+                            <CharDetails charId={this.state.selectedChar}/>
+                        </Col>
+                    </Row>
                 </Container>
             </>
         );

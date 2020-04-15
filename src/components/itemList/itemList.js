@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import styled from "styled-components";
-import gotAPI from "../../api/api";
 import Spinner from "../spinner/spinner";
 import ErrorMessage from "../errorMessage/errorMessage";
 
@@ -12,15 +11,15 @@ const ItemListBlock = styled.ul`
     margin-top: 30px
 `
 class ItemList extends Component {
-    gotAPI = new gotAPI()
     state = {
-        charList: null,
+        itemList: null,
         isError: false
     }
     componentDidMount() {
-        this.gotAPI.getAllCharacters()
-            .then(charList => {
-                this.setState({charList})
+        const {getData} = this.props
+        getData()
+            .then(itemList => {
+                this.setState({itemList})
             })
     }
     componentDidCatch(error, errorInfo) {
@@ -30,23 +29,24 @@ class ItemList extends Component {
     на сервер в componentDidMount и при клике на персонажа вызываем ф-ю из пропсов с его id*/
     renderItems = (arr) => {
         return arr.map((item) => {
-            const {id, name} = item
+            const {id} = item
+            const label = this.props.renderItem(item)
             return (
-                <li key={id} className="list-group-item" onClick={() => this.props.onCharSelected(id)}>
-                    {name}
+                <li key={id} className="list-group-item" onClick={() => this.props.onItemSelected(id)}>
+                    {label}
                 </li>
             )
         })
     }
     render() {
-        const {charList} = this.state
-        if (!charList) {
+        const {itemList} = this.state
+        if (!itemList) {
             return <Spinner/>
         }
         if (this.state.isError) {
             return <ErrorMessage/>
         }
-        const items = this.renderItems(charList)
+        const items = this.renderItems(itemList)
         return (
             <ItemListBlock className="list-group">
                 {items}
