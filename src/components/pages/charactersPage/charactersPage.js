@@ -4,6 +4,7 @@ import ItemDetails, {Field} from "../../itemDetails/itemDetails";
 import ErrorMessage from "../../errorMessage/errorMessage";
 import gotAPI from "../../../api/api";
 import RowBlock from "../../rowBlock/rowBlock";
+import {NavLink} from "react-router-dom";
 
 class CharactersPage extends React.Component {
     gotAPI = new gotAPI()

@@ -55,7 +55,7 @@ class ItemDetails extends Component {
         if (!itemId) {
             return
         }
-        this.setState({loading: true})
+        this.setState({isLoading: true})
         getData(itemId)
             .then((item) => this.onItemDetailsLoaded(item))
             .catch(() => this.onError())

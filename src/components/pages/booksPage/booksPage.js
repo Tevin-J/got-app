@@ -2,39 +2,27 @@ import React from 'react'
 import gotAPI from "../../../api/api";
 import ItemList from "../../itemList/itemList";
 import ErrorMessage from "../../errorMessage/errorMessage";
-import RowBlock from "../../rowBlock/rowBlock";
-import ItemDetails, {Field} from "../../itemDetails/itemDetails";
+import {withRouter} from "react-router-dom";
 
+/*используем НОС withRouter, чтоб из historyAPI получить id той книги, на которую нажали,
+этот id передается из роута компоненты App в компоненту BooksItem*/
 class BooksPage extends React.Component {
     gotAPI = new gotAPI()
     state = {
-        selectedBook: null,
         error: false
     }
     componentDidCatch(error, errorInfo) {
         this.setState({error: true})
     }
-    onBookSelected = (id) => {
-        this.setState({selectedBook: id})
-    }
     render() {
         if (this.state.error) {
             return <ErrorMessage/>
         }
-        const booksList = (
-            <ItemList getData={this.gotAPI.getAllBooks}
-                      onItemSelected={this.onBookSelected} renderItem={(book) => book.name}/>
-        )
-        const bookDetails = (
-            <ItemDetails itemId={this.state.selectedBook} getData={this.gotAPI.getBook}>
-                <Field field='numberOfPages' label='Number of pages'/>
-                <Field field='publisher' label='Publisher'/>
-                <Field field='released' label='Released'/>
-            </ItemDetails>
-        )
         return (
-            <RowBlock left={booksList} right={bookDetails}/>
+            <ItemList getData={this.gotAPI.getAllBooks}
+                      onItemSelected={(itemId) => {this.props.history.push(itemId)}}
+                      renderItem={(book) => book.name}/>
         )
     }
 }
-export default BooksPage
+export default withRouter(BooksPage)
