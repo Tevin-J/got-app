@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import styled from "styled-components";
-import Spinner from "../spinner/spinner";
-import ErrorMessage from "../errorMessage/errorMessage";
+import withData from "./withData";
+import gotAPI from "../../api/api";
 
 const ItemListBlock = styled.ul`
     cursor: pointer;
@@ -13,22 +13,7 @@ const ItemListBlock = styled.ul`
 /*Компоненту ItemList сделали независимой, то что она отрисует зависит от пропсов
 которые в нее придут*/
 class ItemList extends Component {
-    state = {
-        itemList: null,
-        isError: false
-    }
-    /*из пропсов получаем тот запрос на сервер, который необходимо сделать родительской
-    компоненте, будто книги или герои*/
-    componentDidMount() {
-        const {getData} = this.props
-        getData()
-            .then(itemList => {
-                this.setState({itemList})
-            })
-    }
-    componentDidCatch(error, errorInfo) {
-        this.setState({isError: true})
-    }
+
     /*в этой ф-и отрисовываем все айтемы которые придут в стейт после запроса
     на сервер в componentDidMount и при клике на айтем вызываем ф-ю из пропсов с его id*/
     renderItems = (arr) => {
@@ -47,16 +32,11 @@ class ItemList extends Component {
         })
     }
     render() {
-        const {itemList} = this.state
-        if (!itemList) {
-            return <Spinner/>
-        }
-        if (this.state.isError) {
-            return <ErrorMessage/>
-        }
+        /*воспользовались HOC withData и получили массив айтемов из него через пропсы*/
+        const {data} = this.props
         /*если у нас есть в стейте массив айтемов, то получаем его с помощью вызова ф-и
         которая отрисует их*/
-        const items = this.renderItems(itemList)
+        const items = this.renderItems(data)
         return (
             <ItemListBlock className="list-group">
                 {items}
@@ -64,4 +44,6 @@ class ItemList extends Component {
         );
     }
 }
-export default ItemList
+/*оборачиваем ItemList хоком withData, который делает запрос на сервер за данными и
+отвечает за отрисовку спиннеров и тп*/
+export default withData(ItemList)

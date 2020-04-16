@@ -5,9 +5,6 @@ import RandomChar from "../randomChar/randomChar";
 import ErrorMessage from "../errorMessage/errorMessage";
 import ButtonToggle from "reactstrap/es/Button";
 import CharactersPage from "../pages/charactersPage/charactersPage";
-import ItemList from "../itemList/itemList";
-import CharDetails from "../itemDetails/itemDetails";
-import gotAPI from "../../api/api";
 import BooksPage from "../pages/booksPage/booksPage";
 import HousesPage from "../pages/housesPage/housesPage";
 import {HashRouter, Route} from "react-router-dom";
@@ -15,7 +12,6 @@ import BooksItem from "../pages/booksPage/booksItem";
 
 
 class App extends Component {
-    gotAPI = new gotAPI()
     state = {
         error: false,
         showRandomChar: true,
@@ -38,7 +34,20 @@ class App extends Component {
         if (this.state.error) {
             return <ErrorMessage/>
         }
-        const char = this.state.showRandomChar ? <RandomChar/> : null
+        const char = this.state.showRandomChar ? (
+            <Route path='/' exact render = {
+                () => {
+                    return (
+                        <>
+                            <RandomChar/>
+                            <ButtonToggle color='primary' onClick={this.toggleRandomChar}>
+                                Toggle random character
+                            </ButtonToggle>
+                        </>
+                    )
+                }
+            }/>
+            ) : null
         return (
             <HashRouter>
                 <div className='app'>
@@ -49,9 +58,6 @@ class App extends Component {
                         <Row>
                             <Col lg={{size: 5, offset: 0}}>
                                 {char}
-                                <ButtonToggle color='primary' onClick={this.toggleRandomChar}>
-                                    Toggle random character
-                                </ButtonToggle>
                             </Col>
                         </Row>
                         <Route path='/characters' component={CharactersPage}/>

@@ -32,11 +32,16 @@ class RandomChar extends Component {
         isLoading: true,
         isError: false
     }
+    /*настраиваем пропсы по умолчанию, чтоб брались эти значения, если они не придут извне*/
+    static defaultProps = {
+        interval: 5000
+    }
     /*когда компонента отрисуется вызовем ф-ю по загрузке рандомного героя*/
     componentDidMount() {
         this.updateCharacter()
         this.timerId = setInterval(this.updateCharacter, 5000)
     }
+
     /*когда компонента будет убита, обновления героев должны прекратиться*/
     componentWillUnmount() {
         clearInterval(this.timerId)
