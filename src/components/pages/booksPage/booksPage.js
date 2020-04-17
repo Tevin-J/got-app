@@ -6,23 +6,18 @@ import {withRouter} from "react-router-dom";
 
 /*используем НОС withRouter, чтоб из historyAPI получить id той книги, на которую нажали,
 этот id передается из роута компоненты App в компоненту BooksItem*/
-class BooksPage extends React.Component {
-    gotAPI = new gotAPI()
-    state = {
-        error: false
-    }
-    componentDidCatch(error, errorInfo) {
-        this.setState({error: true})
-    }
-    render() {
-        if (this.state.error) {
-            return <ErrorMessage/>
-        }
+const BooksPage = (props) => {
+    try {
         return (
-            <ItemList getData={this.gotAPI.getAllBooks}
-                      onItemSelected={(itemId) => {this.props.history.push(itemId)}}
+            <ItemList getData={new gotAPI().getAllBooks}
+                      onItemSelected={(itemId) => {
+                          props.history.push(itemId)
+                      }}
                       renderItem={(book) => book.name}/>
         )
+    } catch (e) {
+        return <ErrorMessage/>
     }
+
 }
 export default withRouter(BooksPage)

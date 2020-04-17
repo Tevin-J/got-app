@@ -6,27 +6,19 @@ import React, {useState, useEffect} from 'react'
 const withData = (View) => {
     return (
         (props) => {
-            debugger
             const [data, updateData] = useState([])
-            const [isError, toggleIsError] = useState(false)
             /*из пропсов получаем тот запрос на сервер, который необходимо сделать родительской
-            компоненте, будто книги или герои, вторым аргументом передаем пустой массив,
+            компоненте, будь-то книги или герои, вторым аргументом передаем пустой массив,
             чтоб у нас не зациклился запрос*/
             useEffect(() => {
-                debugger
                 props.getData()
                     .then(data => {
                         updateData(data)
                     })
             },[])
-            /*componentDidCatch(error) {
-                toggleIsError(true)
-            }*/
+            try {
                 if (!data) {
                     return <Spinner/>
-                }
-                if (isError) {
-                    return <ErrorMessage/>
                 }
                 return (
                     /*передаем в целевую компоненту props которые передала родительская
@@ -34,6 +26,9 @@ const withData = (View) => {
                     с сервера*/
                     <View {...props} data={data}/>
                 )
+            } catch (e) {
+                return <ErrorMessage/>
+            }
         }
     )
 }
